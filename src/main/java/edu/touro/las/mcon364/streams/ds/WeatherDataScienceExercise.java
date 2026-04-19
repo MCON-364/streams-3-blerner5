@@ -91,7 +91,18 @@ public class WeatherDataScienceExercise {
         // 4. Parse numeric values safely
         // 5. Return Optional.empty() if parsing fails
 
-        throw new UnsupportedOperationException("TODO: implement parseRow");
+        try {
+            String[] p = row.split(",");
+            if (p.length < 6 || p[3].isBlank()) return Optional.empty();
+            return Optional.of(new WeatherRecord(
+                    p[0].trim(), p[1].trim(), p[2].trim(),
+                    Double.parseDouble(p[3].trim()),
+                    Integer.parseInt(p[4].trim()),
+                    Double.parseDouble(p[5].trim())
+            ));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
 
     static boolean isValid(WeatherRecord r) {
@@ -101,7 +112,9 @@ public class WeatherDataScienceExercise {
         // - humidity is between 0 and 100
         // - precipitation is >= 0
 
-        throw new UnsupportedOperationException("TODO: implement isValid");
+        return r.temperatureC >= -60 && r.temperatureC <= 60
+                && r.humidity >= 0 && r.humidity <= 100
+                && r.precipitationMm >= 0;
     }
 
     record CityWeatherSummary(
